@@ -1,38 +1,59 @@
 {
-  "name": "my-app",
+  "name": "liga-bank",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.11.9",
-    "@testing-library/react": "^11.2.3",
-    "@testing-library/user-event": "^12.6.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4"
-  },
   "scripts": {
+    "editorconfig": "editorconfig-cli",
+    "stylelint": "stylelint src/**/*.{css,scss,sass}",
+    "eslint": "eslint src/**/*.{js,jsx}",
+    "jest": "react-scripts test",
+    "jest:no-watch": "react-scripts test --watchAll=false",
+    "test": "npm run jest:no-watch && npm run stylelint && npm run editorconfig && npm run eslint",
+    "analyze": "source-map-explorer build/static/js/*.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "pre-commit": [
+    "test"
+  ],
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "htmlacademy/es6"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "editorconfig-cli": [
+    "*.json",
+    "src/**/*.{js,jsx,sass,scss,css}",
+    "public/**/*.{html}"
+  ],
+  "browserslist": [
+    "last 4 chrome version",
+    "last 4 firefox version",
+    "last 4 safari version"
+  ],
+  "dependencies": {
+    "@testing-library/jest-dom": "5.11.9",
+    "@testing-library/react": "11.2.3",
+    "@testing-library/user-event": "12.6.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-scripts": "4.0.1",
+    "web-vitals": "0.2.4"
+  },
+  "devDependencies": {
+    "@htmlacademy/editorconfig-cli": "1.0.0",
+    "eslint": "7.18.0",
+    "eslint-config-htmlacademy": "2.1.0",
+    "eslint-plugin-html": "6.1.1",
+    "eslint-plugin-react": "7.22.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "node-sass": "4.14.1",
+    "pre-commit": "1.2.2",
+    "source-map-explorer": "2.5.2",
+    "stylelint": "13.9.0",
+    "stylelint-config-htmlacademy": "0.1.4"
   }
 }

@@ -1,3 +1,8 @@
-# https://www.robotstxt.org/robotstxt.html
+User-Agent: Yandex
+Disallow:
+
+User-Agent: Googlebot
+Disallow:
+
 User-agent: *
 Disallow:

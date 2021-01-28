@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "../../../img/logo.svg";
 
 function App() {
   return (
@@ -21,5 +20,7 @@ function App() {
     </div>
   );
 }
+
+App.propTypes = {};
 
 export default App;

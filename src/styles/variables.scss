@@ -1,0 +1,9 @@
+$bald-desktop: 1170px;
+$prime-offset: 98px;
+$desktop: #{$bald-desktop + $prime-offset * 2};
+
+:root {
+  --color-white: white;
+  --color-black: #000000;
+  --color-black-1: #1F1E25;
+}
