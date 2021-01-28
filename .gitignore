@@ -19,7 +19,8 @@
 .env.test.local
 .env.production.local
 .idea
-.vscode
+# Настройки редактора не игнорируются из-за ошибок eslint (.eslintrc.json)
+#.vscode
 *.ai
 *.log
 *.pdf

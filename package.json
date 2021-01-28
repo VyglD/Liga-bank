@@ -5,7 +5,7 @@
   "scripts": {
     "editorconfig": "editorconfig-cli",
     "stylelint": "stylelint src/**/*.{css,scss,sass}",
-    "eslint": "eslint src/**/*.{js,jsx}",
+    "eslint": "eslint src/**/*.{js,jsx} -c main.eslintrc.json",
     "jest": "react-scripts test",
     "jest:no-watch": "react-scripts test --watchAll=false",
     "test": "npm run jest:no-watch && npm run stylelint && npm run editorconfig && npm run eslint",
@@ -17,13 +17,6 @@
   "pre-commit": [
     "test"
   ],
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "htmlacademy/es6"
-    ]
-  },
   "editorconfig-cli": [
     "*.json",
     "src/**/*.{js,jsx,sass,scss,css}",
@@ -52,6 +45,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "node-sass": "4.14.1",
     "pre-commit": "1.2.2",
+    "react-toastify": "7.0.1",
     "source-map-explorer": "2.5.2",
     "stylelint": "13.9.0",
     "stylelint-config-htmlacademy": "0.1.4"

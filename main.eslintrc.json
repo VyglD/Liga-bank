@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "htmlacademy/es6",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ]
+}

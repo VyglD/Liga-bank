@@ -1,0 +1,21 @@
+// Файл создан из-за ошибок компиляции, которые вызываются eslint
+// Основной файл конфигурации указанный в setting.json
+// и используемый для тестов - main.eslintrc.json
+// https://github.com/facebook/create-react-app/issues/9887
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "htmlacademy/es6",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "rules": {
+    "no-console": 0,
+    "jsx-a00y/anchor-is-valid": 0,
+    "no-unused-vars": 0,
+    "object-curly-spacing": 0,
+    "quotes": 0,
+    "semi": 0
+  }
+}

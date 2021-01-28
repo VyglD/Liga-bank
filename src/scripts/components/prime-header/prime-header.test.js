@@ -1,10 +1,12 @@
 import React from "react";
 import {render, screen} from "@testing-library/react";
 import "@testing-library/jest-dom";
-import App from "./app";
+import PrimeHeader from "./prime-header";
 
 test(`renders learn react link`, () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  render(<PrimeHeader
+    toast={() => {}}
+  />);
+  const linkElement = screen.getByText(/Конвертер валют/i);
   expect(linkElement).toBeInTheDocument();
 });
