@@ -5,7 +5,7 @@ import PrimeHeader from "./prime-header";
 
 test(`renders learn react link`, () => {
   render(<PrimeHeader
-    toast={() => {}}
+    onBlankLinkClick={() => {}}
   />);
   const linkElement = screen.getByText(/Конвертер валют/i);
   expect(linkElement).toBeInTheDocument();
