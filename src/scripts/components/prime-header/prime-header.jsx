@@ -46,7 +46,7 @@ const PrimeHeader = (props) => {
             </li>
           </ul>
         </nav>
-        <button className="prime-header__login" onClick={onBlankLinkClick}>
+        <button className="prime-header__login" type="button" onClick={onBlankLinkClick}>
           <svg className="prime-header__login-logo" width="20" height="22" fill="currentColor">
             <path d="M2.22 14.3h2.22v5.5h13.34V2.2H4.44v5.5H2.22V1.1A1.12 1.12 0 013.33 0H18.9A1.1 1.1 0 0120 1.1v19.8a1.12 1.12 0 01-1.11 1.1H3.33a1.1 1.1 0 01-1.11-1.1v-6.6zM8.9 9.9V6.6l5.55 4.4-5.55 4.4v-3.3H0V9.9h8.89z"/>
           </svg>

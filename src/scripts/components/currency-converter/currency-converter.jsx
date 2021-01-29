@@ -1,5 +1,6 @@
 import React from "react";
 import ConverterField from "../converter-field/converter-field";
+import ConverterDatepicker from "../converter-datepicker/converter-datepicker";
 import {ConverterFieldType} from "../../constants";
 
 const CurrencyConverter = () => {
@@ -14,6 +15,15 @@ const CurrencyConverter = () => {
         converterFieldType={ConverterFieldType.OUT}
         customClass="currency-converter__field-out"
       />
+      <ConverterDatepicker
+        customClass="currency-converter__datepicker"
+      />
+      <button
+        className="currency-converter__button action-button"
+        type="button"
+      >
+        Сохранить результат
+      </button>
     </section>
   );
 };
