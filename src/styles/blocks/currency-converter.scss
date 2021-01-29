@@ -1,0 +1,47 @@
+.currency-converter {
+  --cc-input-width: 390px;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: $desktop;
+  margin: 0 auto;
+  padding: 20px $prime-offset;
+
+  &::after {
+    content: "";
+
+    order: 2;
+    flex-shrink: 0;
+    display: block;
+    width: 57px;
+    height: 41px;
+    margin: auto 0 12px 10px;
+
+    background-image: url("../../img/arrows.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+
+.currency-converter__title {
+  order: 1;
+  display: block;
+  width: 100%;
+  margin: 26px 0 49px;
+
+  color: var(--color-black-1, black);
+  font-weight: 700;
+  font-size: 41px;
+  line-height: 57px;
+}
+
+.currency-converter__field-in {
+  order: 2;
+}
+
+.currency-converter__field-out {
+  order: 4;
+}

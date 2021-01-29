@@ -1,5 +1,6 @@
 import React from "react";
 import Banner from "../banner/banner";
+import CurrencyConverter from "../currency-converter/currency-converter";
 import {functionType} from "../../types/types";
 
 const Main = (props) => {
@@ -11,6 +12,7 @@ const Main = (props) => {
       <Banner
         onBlankLinkClick={onBlankLinkClick}
       />
+      <CurrencyConverter />
     </main>
   );
 };

@@ -1,0 +1,9 @@
+@mixin customBorder() {
+  border: 1px solid var(--color-black-1, black);
+  border-radius: 4px;
+
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 0 2px var(--color-black-1, black);
+  }
+}
