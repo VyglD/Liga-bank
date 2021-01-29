@@ -4,10 +4,12 @@ $desktop: #{$bald-desktop + $prime-offset * 2};
 
 :root {
   --color-white: white;
+  --color-white-1: #F6F7FF;
+  --color-white-2: #E0E1EA;
   --color-black: #000000;
   --color-black-1: #1F1E25;
   --color-black-2: #707C87;
-  --color-gray: #F6F7FF;
   --color-blue: #2C36F2;
+  --color-blue-1: #2027B3;
   --color-orange: #F25B24;
 }

@@ -17,6 +17,7 @@
     "object-curly-spacing": 0,
     "quotes": 0,
     "semi": 0,
-    "no-multi-spaces": 0
+    "no-multi-spaces": 0,
+    "indent": 0
   }
 }

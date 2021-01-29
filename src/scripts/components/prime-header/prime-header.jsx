@@ -14,7 +14,7 @@ const PrimeHeader = (props) => {
           src={logo}
           width="149"
           height="25"
-          alt="Лига банк."
+          alt="Лига Банк."
         />
         <nav className="prime-header__nav">
           <ul className="prime-header__nav-links-list">

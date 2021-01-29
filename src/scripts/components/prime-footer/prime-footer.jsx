@@ -14,7 +14,7 @@ const PrimeFooter = (props) => {
           src={logo}
           width="149"
           height="25"
-          alt="Лига банк."
+          alt="Лига Банк."
         />
         <p className="prime-footer__label-info">
           150015, г. Москва, ул. Московская, д. 32
