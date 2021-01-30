@@ -20,6 +20,7 @@
     "no-multi-spaces": 1,
     "indent": 1,
     "no-undef": 1,
-    "react/prop-types": 1
+    "react/prop-types": 1,
+    "max-nested-callbacks": 1
   }
 }

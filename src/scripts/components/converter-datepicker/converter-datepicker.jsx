@@ -5,7 +5,7 @@ import {stringType} from "../../types/types";
 const ConverterDatepicker = (props) => {
   const {customClass} = props;
 
-  const [selectedDate, setDate] = React.useState(new Date());
+  const today = React.useMemo(() => new Date(), []);
 
   const minDate = React.useMemo(
       () => {
@@ -16,14 +16,7 @@ const ConverterDatepicker = (props) => {
       []
   );
 
-  const maxDate = React.useMemo(
-      () => {
-        const max = new Date();
-        max.setDate(max.getDate() + 7);
-        return max;
-      },
-      []
-  );
+  const [selectedDate, setDate] = React.useState(today);
 
   return (
     <DatePicker
@@ -34,7 +27,7 @@ const ConverterDatepicker = (props) => {
       calendarIcon="Calendar"
       clearIcon={null}
       minDate={minDate}
-      maxDate={maxDate}
+      maxDate={today}
     />
   );
 };
