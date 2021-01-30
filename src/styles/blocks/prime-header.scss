@@ -3,6 +3,8 @@
   width: 100%;
 
   background-color: var(--color-white-1, white);
+
+  @include smoothAppearance();
 }
 
 .prime-header__content {

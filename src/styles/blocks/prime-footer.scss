@@ -5,6 +5,8 @@
   padding: 49px calc((100% - #{$bald-desktop}) / 2);
 
   background-color: var(--color-white-1, white);
+
+  @include smoothAppearance();
 }
 
 .prime-footer__label-wrapper {

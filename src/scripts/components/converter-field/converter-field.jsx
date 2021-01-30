@@ -1,17 +1,22 @@
 import React from "react";
 import {Currency} from "../../constants";
-import {converterFieldTypeType, optionalStringType} from "../../types/types";
+import {
+  currencyType,
+  functionType,
+  optionalStringType,
+  stringType
+} from "../../types/types";
 
 const ConverterField = (props) => {
-  const {converterFieldType, customClass} = props;
-  const {label, name, initialСurrency} = converterFieldType;
-
-  const [selectedCurrency, setCurrency] = React.useState(initialСurrency);
-
-  const handleCurrencyChange = React.useCallback(
-      (evt) => setCurrency(evt.target.value),
-      [setCurrency]
-  );
+  const {
+    customClass,
+    label,
+    name,
+    value,
+    onInput,
+    selectedCurrency,
+    onChange
+  } = props;
 
   return (
     <div className={`${customClass} converter-field`}>
@@ -25,21 +30,23 @@ const ConverterField = (props) => {
         className="converter-field__input"
         type="number"
         name={name}
+        value={value}
+        onInput={onInput}
         id={`converter-${name}`}
       />
       <select
         className="converter-field__select"
         value={selectedCurrency}
-        onChange={handleCurrencyChange}
+        onChange={onChange}
       >
         {
-          Object.values(Currency).map((value) => (
+          Object.values(Currency).map((currencyValue) => (
             <option
-              key={value}
+              key={currencyValue}
               className="converter-field__select-option"
-              name={value}
+              name={currencyValue}
             >
-              {value}
+              {currencyValue}
             </option>
           ))
         }
@@ -49,8 +56,13 @@ const ConverterField = (props) => {
 };
 
 ConverterField.propTypes = {
-  converterFieldType: converterFieldTypeType,
   customClass: optionalStringType,
+  label: stringType,
+  name: stringType,
+  value: stringType,
+  onInput: functionType,
+  selectedCurrency: currencyType,
+  onChange: functionType,
 };
 
 export default ConverterField;

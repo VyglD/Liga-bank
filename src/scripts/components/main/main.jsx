@@ -7,7 +7,7 @@ const Main = (props) => {
   const {onBlankLinkClick} = props;
 
   return (
-    <main>
+    <main className="main">
       <h1 className="visually-hidden">Удобный конвертер валют от Лига Банка</h1>
       <Banner
         onBlankLinkClick={onBlankLinkClick}

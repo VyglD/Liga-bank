@@ -7,3 +7,7 @@
     box-shadow: 0 0 0 2px var(--color-black-1, black);
   }
 }
+
+@mixin smoothAppearance {
+  animation: fade 0.5s;
+}

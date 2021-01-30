@@ -1,4 +1,5 @@
 import {ActionCreator} from "../store/actions";
+import {createCurrencyRateKey, getFormatedDateString} from "../utils";
 import {Currency} from "../constants";
 
 const LOCAL_STORAGE_KEY = `converter-currency`;
@@ -16,14 +17,6 @@ const timeLabel = new Date()
   );
 
 const currencyStorage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-
-const minDate = new Date();
-minDate.setDate(minDate.getDate() - 7);
-const maxDate = new Date();
-
-const getFormatedDateString = (date) => {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-};
 
 const fetchCurrencyRates = (currenciesArgs, startDate, endDate) => {
   const url = `https://free.currconv.com/api/v7/convert
@@ -49,8 +42,31 @@ const fetchCurrencyRates = (currenciesArgs, startDate, endDate) => {
     });
 };
 
+const createCurrencyRateList = (rates) => {
+  const currencyRates = {};
+
+  Object.entries(rates).forEach(
+      ([currency, dates]) => {
+        Object.entries(dates).forEach(([date, rate]) => {
+          const [currencyFrom, currencyTo] = currency.split(`_`);
+
+          currencyRates[createCurrencyRateKey(currencyFrom, currencyTo, date)] = rate;
+          currencyRates[createCurrencyRateKey(currencyTo, currencyFrom, date)] = 1 / rate;
+        });
+      }
+  );
+
+  return currencyRates;
+};
+
 const pullCurrencyRates = () => (dispatch, _getState) => {
   return (async () => {
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() - 7);
+    const maxDate = new Date();
+
+    await dispatch(ActionCreator.setDateRange({minDate, maxDate}));
+
     let currencyRates = {};
 
     if (!currencyStorage || currencyStorage.timeLabel !== timeLabel) {
@@ -62,14 +78,10 @@ const pullCurrencyRates = () => (dispatch, _getState) => {
         })
         .reduce((result, args) => result.concat(args), []);
 
-      const rates = await fetchCurrencyRates(currenciesArgs.slice(0, 2).join(`,`), minDate, maxDate);
-      Object.entries(rates).forEach(
-          ([currency, dates]) => {
-            Object.entries(dates).forEach(([date, rate]) => {
-              currencyRates[`${currency}_${date}`] = rate;
-            });
-          }
-      );
+      for (let i = 0, j = 2; i < currenciesArgs.length; i = i + 2, j = j + 2) {
+        const rates = await fetchCurrencyRates(currenciesArgs.slice(i, j).join(`,`), minDate, maxDate);
+        Object.assign(currencyRates, createCurrencyRateList(rates));
+      }
 
       localStorage.setItem(
           LOCAL_STORAGE_KEY,
