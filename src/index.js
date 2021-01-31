@@ -8,7 +8,6 @@ import {Provider} from "react-redux";
 import thunk from "redux-thunk";
 import App from "./scripts/components/app/app";
 import reducer from "./scripts/store/reducer";
-import reportWebVitals from "./scripts/reportWebVitals";
 import {pullCurrencyRates} from "./scripts/middlewares/thunk";
 
 const store = createStore(
@@ -29,6 +28,3 @@ Promise.resolve(store.dispatch(pullCurrencyRates()))
         document.getElementById(`root`)
     );
   });
-
-// eslint-disable-next-line no-console
-reportWebVitals(console.log);

@@ -44,7 +44,6 @@ const ConverterField = (props) => {
             <option
               key={currencyValue}
               className="converter-field__select-option"
-              name={currencyValue}
             >
               {currencyValue}
             </option>

@@ -46,8 +46,8 @@ const PrimeFooter = (props) => {
           </li>
         </ul>
       </nav>
-      <div className="prime-footer__connection-wrapper prime-footer__connection-wrapper--sms">
-        <a className="prime-footer__connection-link" href="sms:0904">
+      <div className="prime-footer__connection-wrapper">
+        <a className="prime-footer__connection-link" href="tel:0904">
           <svg className="prime-footer__conection-logo" width="10" height="16" fill="currentColor">
             <path d="M8.84 0H1.16C.52 0 0 .49 0 1.08v13.84C0 15.52.52 16 1.16 16h7.68c.64 0 1.16-.49 1.16-1.08V1.08C10 .48 9.48 0 8.84 0zM3.77.78h2.46c.08 0 .14.06.14.13s-.06.13-.14.13H3.77c-.08 0-.14-.06-.14-.13s.06-.13.14-.13zM5 15.46c-.32 0-.58-.24-.58-.54 0-.3.26-.54.58-.54.32 0 .58.24.58.54 0 .3-.26.54-.58.54zM9.2 14H.8V1.71h8.4V14z" />
           </svg>

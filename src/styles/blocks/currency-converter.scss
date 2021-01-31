@@ -52,8 +52,9 @@
   display: block;
   width: var(--cc-input-width);
   margin-top: 85px;
-  padding: 5px 12px 1px 17px;
+  padding-left: 27px;
 
+  cursor: pointer;
   @include customBorder();
   outline: none;
 
@@ -70,19 +71,41 @@
   }
 
   & .react-date-picker__calendar-button {
-    box-sizing: content-box;
-    display: block;
-    width: 40px;
-    height: 44px;
-    padding: 0 13px 8px 0;
-
+    padding: 6px 18px 8px;
 
     font-size: 0;
 
-    background-image: url("../../img/calendar.svg");
-    background-position: top center;
-    background-repeat: no-repeat;
-    background-size: 40px 44px;
+    outline: none;
+
+    &::before {
+      content: "";
+
+      box-sizing: content-box;
+      display: block;
+      width: 40px;
+      height: 44px;
+
+      background-image: url("../../img/calendar.svg");
+      background-position: top center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
+
+  & .react-date-picker__inputGroup {
+    padding-top: 5px;
+  }
+
+  /* stylelint-disable-next-line no-duplicate-selectors */
+  & .react-date-picker__calendar-button {
+    &:focus,
+    &:hover {
+      background-color: var(--color-gray-0, gray);
+    }
+
+    &:active {
+      opacity: 0.3;
+    }
   }
 }
 
