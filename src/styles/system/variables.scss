@@ -2,14 +2,18 @@ $bald-desktop: 1170px;
 $prime-offset: 98px;
 $desktop: #{$bald-desktop + $prime-offset * 2};
 
+$color-black-0: #000000;
+
 :root {
-  --color-white: white;
+  --color-white-0: #FFFFFF;
   --color-white-1: #F6F7FF;
   --color-white-2: #E0E1EA;
-  --color-black: #000000;
+  --color-black-0: #{$color-black-0};
+  --color-black-0-25: rgba(#{hex-to-rgb($color-black-0)}, 0.25);
   --color-black-1: #1F1E25;
   --color-black-2: #707C87;
-  --color-blue: #2C36F2;
+  --color-gray-0: #C1C2CA;
+  --color-blue-0: #2C36F2;
   --color-blue-1: #2027B3;
-  --color-orange: #F25B24;
+  --color-orange-0: #F25B24;
 }

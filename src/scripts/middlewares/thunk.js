@@ -1,8 +1,8 @@
 import {ActionCreator} from "../store/actions";
-import {createCurrencyRateKey, getFormatedDateString} from "../utils";
+import {createCurrencyRateKey, getDateStringWithDashes} from "../utils";
 import {Currency} from "../constants";
 
-const LOCAL_STORAGE_KEY = `converter-currency`;
+const CONVERTER_CURRENCY_KEY = `converter-currency`;
 
 const timeLabel = new Date()
   .toLocaleDateString(
@@ -16,15 +16,15 @@ const timeLabel = new Date()
       }
   );
 
-const currencyStorage = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+const currencyStorage = JSON.parse(localStorage.getItem(CONVERTER_CURRENCY_KEY));
 
 const fetchCurrencyRates = (currenciesArgs, startDate, endDate) => {
   const url = `https://free.currconv.com/api/v7/convert
                 ?apiKey=381d4c9c0fd2eb28d306
                 &q=${currenciesArgs}
                 &compact=ultra
-                &date=${getFormatedDateString(startDate)}
-                &endDate=${getFormatedDateString(endDate)}`
+                &date=${getDateStringWithDashes(startDate)}
+                &endDate=${getDateStringWithDashes(endDate)}`
                 .replace(/[\r\n ]+/g, ``);
 
   return fetch(url)
@@ -84,7 +84,7 @@ const pullCurrencyRates = () => (dispatch, _getState) => {
       }
 
       localStorage.setItem(
-          LOCAL_STORAGE_KEY,
+          CONVERTER_CURRENCY_KEY,
           JSON.stringify({
             timeLabel,
             currencyRates,

@@ -2,7 +2,11 @@ const getTwoDigitString = (number) => {
   return String(number).padStart(2, 0);
 };
 
-const getFormatedDateString = (date) => {
+const getDateStringWithDots = (date) => {
+  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+};
+
+const getDateStringWithDashes = (date) => {
   const month = getTwoDigitString(date.getMonth() + 1);
   const day = getTwoDigitString(date.getDate());
 
@@ -14,6 +18,7 @@ const createCurrencyRateKey = (currencyFrom, currencyTo, date) => {
 };
 
 export {
-  getFormatedDateString,
+  getDateStringWithDashes,
+  getDateStringWithDots,
   createCurrencyRateKey,
 };

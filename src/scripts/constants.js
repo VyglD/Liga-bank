@@ -6,6 +6,9 @@ const Currency = {
   CNY: `CNY`,
 };
 
+const MAX_HISTORY_NUMBER = 10;
+
 export {
+  MAX_HISTORY_NUMBER,
   Currency,
 };

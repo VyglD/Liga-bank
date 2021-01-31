@@ -1,8 +1,9 @@
-@import "./fonts.scss";
-@import "./variables.scss";
-@import "./common.scss";
-@import "./animations.scss";
-@import "./mixins.scss";
+@import "./system/fonts.scss";
+@import "./system/functions.scss";
+@import "./system/variables.scss";
+@import "./system/common.scss";
+@import "./system/animations.scss";
+@import "./system/mixins.scss";
 @import "./blocks/prime.scss";
 @import "./blocks/prime-header.scss";
 @import "./blocks/main.scss";
@@ -11,3 +12,4 @@
 @import "./blocks/banner.scss";
 @import "./blocks/currency-converter.scss";
 @import "./blocks/converter-field.scss";
+@import "./blocks/converter-history.scss";

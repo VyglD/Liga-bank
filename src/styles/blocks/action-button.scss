@@ -1,8 +1,8 @@
 .action-button {
   --ab-vertical-padding: 20px;
   --ab-horizontal-padding: 20px;
-  --ab-color: var(--color-white, white);
-  --ab-background-color: var(--color-blue, blue);
+  --ab-color: var(--color-white-0, white);
+  --ab-background-color: var(--color-blue-0, blue);
 
   position: relative;
 
@@ -32,14 +32,14 @@
 .action-button {
   &:hover,
   &:focus {
-    color: var(--color-white, white);
+    color: var(--color-white-0, white);
 
-    background-color: var(--color-orange, orange);
-    box-shadow: 1px 2px 4px 0 var(--color-black, black);
+    background-color: var(--color-orange-0, orange);
+    box-shadow: 1px 2px 4px 0 var(--color-black-0, black);
   }
 
   &:hover {
-    box-shadow: 2px 3px 11px 0 var(--color-black, black);
+    box-shadow: 2px 3px 11px 0 var(--color-black-0, black);
   }
 
   &:active {

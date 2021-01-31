@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-start;
   margin-top: auto;
-  padding: 49px calc((100% - #{$bald-desktop}) / 2);
+  padding: 49px calc((100% - #{$bald-desktop}) / 2) 51px;
 
   background-color: var(--color-white-1, white);
 
@@ -57,7 +57,7 @@
   transition: transform 0.3s;
 
   &--active {
-    color: var(--color-blue, blue);
+    color: var(--color-blue-0, blue);
   }
 }
 
@@ -70,7 +70,7 @@
     }
 
     &:hover {
-      color: var(--color-orange, orange);
+      color: var(--color-orange-0, orange);
     }
 
     &:active {
@@ -120,7 +120,7 @@
     &:hover {
       &,
       & .prime-footer__conection-logo {
-        color: var(--color-orange, orange);
+        color: var(--color-orange-0, orange);
       }
     }
 
@@ -201,7 +201,7 @@
     }
 
     &:hover {
-      color: var(--color-orange, orange);
+      color: var(--color-orange-0, orange);
     }
 
     &:active {

@@ -4,3 +4,4 @@ export * from "./number/number-type";
 export * from "./currency/currency-type";
 export * from "./date/date-type";
 export * from "./currency-rates/currency-rates-type";
+export * from "./exchanges/exchanges-type";

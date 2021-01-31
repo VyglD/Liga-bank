@@ -1,0 +1,119 @@
+.converter-history {
+  position: relative;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 477px;
+  margin: 99px auto 90px;
+  padding: 20px 70px;
+
+  background-color: var(--color-white-1, white);
+  border-radius: 4px;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: block;
+    width: 1px;
+    height: 60%;
+    min-height: 289px;
+    margin-top: 6px;
+
+    background-color: var(--color-gray-0);
+    box-shadow: 0 4px 4px var(--color-black-0-25);
+
+    transform: translateY(-50%);
+  }
+}
+
+.converter-history__title {
+  display: block;
+  margin: 24px 0 0;
+
+  color: var(--color-black-1, black);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 39px;
+}
+
+.converter-history__exchanges-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  margin: 35px auto 38px;
+}
+
+.converter-history__exchange-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 260px;
+  margin-left: 131px;
+  padding: 15px 0 8px;
+
+  &::after {
+    content: "";
+
+    order: -2;
+    flex-shrink: 0;
+    display: block;
+    width: 40px;
+    height: 20px;
+    margin: 0 13px;
+
+    background-image: url("../../img/arrow.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+
+.converter-history__exchange-date,
+.converter-history__exchange-amount,
+.converter-history__exchange-result {
+  display: inline-block;
+  vertical-align: middle;
+
+  font-size: 18px;
+  line-height: 23px;
+  text-overflow: ellipsis;
+
+  overflow: hidden;
+}
+
+.converter-history__exchange-date {
+  order: -4;
+  flex-shrink: 0;
+  width: 91px;
+  margin-right: 40px;
+  margin-left: -131px;
+
+  text-align: right;
+
+  overflow: hidden;
+}
+
+.converter-history__exchange-amount {
+  order: -3;
+}
+
+.converter-history__exchange-result {
+  order: -1;
+}
+
+.converter-history__clear-button {
+  --ab-vertical-padding: 17px;
+  --ab-horizontal-padding: 29px;
+
+  margin: auto auto 18px 0;
+
+  font-size: 16px;
+  line-height: 19px;
+}

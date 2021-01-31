@@ -60,7 +60,7 @@
   transition: box-shadow 0.2s;
 
   & .react-date-picker__wrapper {
-    color: var(--color-black, black);
+    color: var(--color-black-0, black);
     font-weight: 400;
     font-size: 22px;
     line-height: 34px;
@@ -86,7 +86,7 @@
   }
 }
 
-.currency-converter__button {
+.currency-converter__save-button {
   --ab-vertical-padding: 21px;
   --ab-horizontal-padding: 102px;
 

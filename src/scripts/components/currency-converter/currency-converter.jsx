@@ -2,9 +2,17 @@ import React from "react";
 import {connect} from "react-redux";
 import ConverterField from "../converter-field/converter-field";
 import ConverterDatepicker from "../converter-datepicker/converter-datepicker";
-import {getFormatedDateString, createCurrencyRateKey} from "../../utils";
-import {Currency} from "../../constants";
+import ConverterHistory from "../converter-history/converter-history";
+import {
+  getDateStringWithDashes,
+  getDateStringWithDots,
+  createCurrencyRateKey
+} from "../../utils";
+import {Currency, MAX_HISTORY_NUMBER} from "../../constants";
 import {currencyRatesType, dateType} from "../../types/types";
+
+const DIVIDER = 10000;
+const CONVERTER_HISTORY_KEY = `converter-history`;
 
 const CurrencyConverter = (props) => {
   const {currencyRates, minDate, maxDate} = props;
@@ -18,7 +26,7 @@ const CurrencyConverter = (props) => {
         const key = createCurrencyRateKey(
             currencyIn,
             currencyOut,
-            getFormatedDateString(date)
+            getDateStringWithDashes(date)
         );
 
         return currencyRates[key];
@@ -58,6 +66,18 @@ const CurrencyConverter = (props) => {
   const [currencyInValue, setCurrencyInValue] = React.useState(1000);
   const [currencyOutValue, setCurrencyOutValue] = React.useState(() => currencyInValue * currencyRate);
 
+  const [exchanges, setExchanges] = React.useState(
+      () => {
+        let historyStorage = JSON.parse(localStorage.getItem(CONVERTER_HISTORY_KEY));
+
+        if (!historyStorage) {
+          historyStorage = [];
+        }
+
+        return historyStorage;
+      }
+  );
+
   React.useEffect(
       () => {
         setCurrencyRate(getCurrencyRate(currencyIn, currencyOut, selectedDate));
@@ -67,7 +87,7 @@ const CurrencyConverter = (props) => {
 
   React.useEffect(
       () => {
-        setCurrencyOutValue(Math.round(currencyInValue * currencyRate * 1000) / 1000);
+        setCurrencyOutValue(Math.round(currencyInValue * currencyRate * DIVIDER) / DIVIDER);
       },
       [setCurrencyOutValue, currencyInValue, currencyRate]
   );
@@ -98,7 +118,7 @@ const CurrencyConverter = (props) => {
         const newValue = evt.target.value;
 
         setCurrencyInValue(newValue);
-        setCurrencyOutValue(Math.round(newValue * currencyRate * 1000) / 1000);
+        setCurrencyOutValue(Math.round(newValue * currencyRate * DIVIDER) / DIVIDER);
       },
       [setCurrencyInValue, setCurrencyOutValue, currencyRate]
   );
@@ -108,10 +128,41 @@ const CurrencyConverter = (props) => {
         const newValue = evt.target.value;
 
         setCurrencyOutValue(newValue);
-        setCurrencyInValue(Math.round(newValue / currencyRate * 1000) / 1000);
+        setCurrencyInValue(Math.round(newValue / currencyRate * DIVIDER) / DIVIDER);
       },
       [setCurrencyInValue, setCurrencyOutValue, currencyRate]
   );
+
+  const handleSaveButtonClick = React.useCallback(
+      () => {
+        const tempExchanges = exchanges.slice();
+
+        if (tempExchanges.length === MAX_HISTORY_NUMBER) {
+          tempExchanges.pop();
+        }
+
+        tempExchanges.unshift({
+          date: getDateStringWithDots(selectedDate),
+          amount: `${currencyInValue} ${currencyIn}`,
+          result: `${currencyOutValue} ${currencyOut}`,
+        });
+
+        localStorage.setItem(
+            CONVERTER_HISTORY_KEY,
+            JSON.stringify(tempExchanges)
+        );
+        setExchanges(tempExchanges);
+      },
+      [exchanges, setExchanges, selectedDate, currencyInValue, currencyIn, currencyOutValue, currencyOut]
+  );
+
+  const handleClearButtonClick = () => {
+    localStorage.setItem(
+        CONVERTER_HISTORY_KEY,
+        JSON.stringify([])
+    );
+    setExchanges([]);
+  };
 
   return (
     <section className="currency-converter">
@@ -142,11 +193,16 @@ const CurrencyConverter = (props) => {
         onChange={handleDateChange}
       />
       <button
-        className="currency-converter__button action-button"
+        className="currency-converter__save-button action-button"
         type="button"
+        onClick={handleSaveButtonClick}
       >
         Сохранить результат
       </button>
+      <ConverterHistory
+        exchanges={exchanges}
+        onClearButtonClick={handleClearButtonClick}
+      />
     </section>
   );
 };
