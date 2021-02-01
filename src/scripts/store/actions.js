@@ -1,6 +1,7 @@
 const ActionType = {
   LOAD_CURRENCY_RATE: `LOAD_CURRENCY_RATE`,
   SET_DATE_RANGE: `SET_DATE_RANGE`,
+  COMPLETE_LOADING: `COMPLETE_LOADING`,
 };
 
 const ActionCreator = {
@@ -11,6 +12,9 @@ const ActionCreator = {
   setDateRange: (dateRange) => ({
     type: ActionType.SET_DATE_RANGE,
     payload: dateRange,
+  }),
+  completeLoading: () => ({
+    type: ActionType.COMPLETE_LOADING,
   }),
 };
 

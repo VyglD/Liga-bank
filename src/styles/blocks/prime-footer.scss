@@ -61,21 +61,18 @@
   }
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.prime-footer__link {
-  &[href]:not(#{&}--active) {
-    &:hover,
-    &:focus {
-      transform: scale(1.1) translateX(10%);
-    }
+.prime-footer__link[href]:not(#{&}--active):not(:disabled) {
+  &:hover,
+  &:focus {
+    transform: scale(1.1) translateX(10%);
+  }
 
-    &:hover {
-      color: var(--color-orange-0, orange);
-    }
+  &:hover {
+    color: var(--color-orange-0, orange);
+  }
 
-    &:active {
-      opacity: 0.2;
-    }
+  &:active {
+    opacity: 0.2;
   }
 }
 
@@ -107,26 +104,23 @@
   outline: none;
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.prime-footer__connection-link {
-  &[href] {
-    &:hover,
-    &:focus {
-      .prime-footer__connection-link-label {
-        transform: scale(1.1);
-      }
+.prime-footer__connection-link[href]:not(:disabled) {
+  &:hover,
+  &:focus {
+    .prime-footer__connection-link-label {
+      transform: scale(1.1);
     }
+  }
 
-    &:hover {
-      &,
-      & .prime-footer__conection-logo {
-        color: var(--color-orange-0, orange);
-      }
+  &:hover {
+    &,
+    & .prime-footer__conection-logo {
+      color: var(--color-orange-0, orange);
     }
+  }
 
-    &:active {
-      opacity: 0.2;
-    }
+  &:active {
+    opacity: 0.2;
   }
 }
 
@@ -154,8 +148,7 @@
   overflow: hidden;
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.prime-footer__connection-wrapper {
+.prime-footer__connection-wrapper:not(:disabled) {
   &--phone {
     --left-padding: 32px;
 
@@ -192,20 +185,17 @@
   outline: none;
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.prime-footer__social-link {
-  &[href] {
-    &:hover,
-    &:focus {
-      transform: scale(1.2);
-    }
+.prime-footer__social-link[href]:not(:disabled) {
+  &:hover,
+  &:focus {
+    transform: scale(1.2);
+  }
 
-    &:hover {
-      color: var(--color-orange-0, orange);
-    }
+  &:hover {
+    color: var(--color-orange-0, orange);
+  }
 
-    &:active {
-      opacity: 0.2;
-    }
+  &:active {
+    opacity: 0.2;
   }
 }

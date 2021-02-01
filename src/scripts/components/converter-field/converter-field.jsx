@@ -1,10 +1,11 @@
 import React from "react";
-import {Currency} from "../../constants";
 import {
   currencyType,
+  currenciesType,
   functionType,
   optionalStringType,
-  stringType
+  stringType,
+  booleanType,
 } from "../../types/types";
 
 const ConverterField = (props) => {
@@ -15,7 +16,9 @@ const ConverterField = (props) => {
     value,
     onInput,
     selectedCurrency,
-    onChange
+    onChange,
+    disabled,
+    options,
   } = props;
 
   return (
@@ -38,9 +41,10 @@ const ConverterField = (props) => {
         className="converter-field__select"
         value={selectedCurrency}
         onChange={onChange}
+        disabled={disabled}
       >
         {
-          Object.values(Currency).map((currencyValue) => (
+          options.map((currencyValue) => (
             <option
               key={currencyValue}
               className="converter-field__select-option"
@@ -62,6 +66,8 @@ ConverterField.propTypes = {
   onInput: functionType,
   selectedCurrency: currencyType,
   onChange: functionType,
+  disabled: booleanType,
+  options: currenciesType,
 };
 
 export default ConverterField;

@@ -21,6 +21,8 @@
     "indent": 1,
     "no-undef": 1,
     "react/prop-types": 1,
-    "max-nested-callbacks": 1
+    "max-nested-callbacks": 1,
+    "no-mixed-spaces-and-tabs": 1,
+    "comma-spacing": 1
   }
 }

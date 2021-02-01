@@ -1,3 +1,5 @@
+import {MILLISECONDS_PER_DAY} from "./constants";
+
 const getTwoDigitString = (number) => {
   return String(number).padStart(2, 0);
 };
@@ -13,12 +15,20 @@ const getDateStringWithDashes = (date) => {
   return `${date.getFullYear()}-${month}-${day}`;
 };
 
-const createCurrencyRateKey = (currencyFrom, currencyTo, date) => {
-  return `${currencyFrom}_${currencyTo}_${date}`;
+const getDates = (dateStart, dateFinish) => {
+  const dates = [];
+  const start = dateStart.getTime();
+  const finish = dateFinish.getTime();
+
+  for (let date = start; date <= finish; date = date + MILLISECONDS_PER_DAY) {
+    dates.push(getDateStringWithDots(new Date(date)));
+  }
+
+  return dates;
 };
 
 export {
   getDateStringWithDashes,
   getDateStringWithDots,
-  createCurrencyRateKey,
+  getDates,
 };

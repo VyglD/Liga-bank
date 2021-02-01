@@ -1,8 +1,10 @@
 import {ActionCreator} from "../store/actions";
-import {createCurrencyRateKey, getDateStringWithDashes} from "../utils";
-import {Currency} from "../constants";
+import {getDates, getDateStringWithDashes, getDateStringWithDots} from "../utils";
+import {Currency, InitialCurrency} from "../constants";
 
 const CONVERTER_CURRENCY_KEY = `converter-currency`;
+
+const MAX_NUMBER_PAIRS = 2;
 
 const timeLabel = new Date()
   .toLocaleDateString(
@@ -41,21 +43,76 @@ const fetchCurrencyRates = (currenciesArgs, startDate, endDate) => {
     });
 };
 
-const createCurrencyRateList = (rates) => {
-  const currencyRates = {};
+const adaptServerRatesForClient = (serverResponse, currencyRates) => {
+  Object.entries(serverResponse)
+    .forEach(([pair, dates]) => {
+      const [from, to] = pair.split(`_`);
+      currencyRates[from][to] = {};
+      currencyRates[to][from] = {};
 
-  Object.entries(rates).forEach(
-      ([currency, dates]) => {
-        Object.entries(dates).forEach(([date, rate]) => {
-          const [currencyFrom, currencyTo] = currency.split(`_`);
+      Object.entries(dates)
+        .forEach(([date, rate]) => {
+          const formattedDate = getDateStringWithDots(new Date(date));
 
-          currencyRates[createCurrencyRateKey(currencyFrom, currencyTo, date)] = rate;
-          currencyRates[createCurrencyRateKey(currencyTo, currencyFrom, date)] = 1 / rate;
+          currencyRates[from][to][formattedDate] = rate;
+          currencyRates[to][from][formattedDate] = 1 / rate;
         });
-      }
-  );
+    });
+};
 
-  return currencyRates;
+const createCurrencyRatesStructure = (dates) => {
+  const currencies = Object.values(Currency);
+
+  return currencies
+    .map((from) => {
+      const sameCurrency = currencies.filter((to) => from === to)
+        .map((to) => {
+          const ratePerDays = dates.map((date) => ({[date]: 1}))
+            .reduce((result, item) => ({...result, ...item}), {});
+
+          return {[to]: ratePerDays};
+        })
+        .reduce((result, item) => ({...result, ...item}), {});
+
+      return {[from]: sameCurrency};
+    })
+    .reduce((result, item) => ({...result, ...item}), {});
+};
+
+const createCurrencyPair = (from, to) => {
+  return `${from}_${to}`;
+};
+
+const getCurrencyPairs = () => {
+  const pairs = [];
+
+  const currencies = Object.values(Currency);
+
+  const tempStructure = currencies
+    .map((from) => ({[from]: currencies.filter((to) => to !== from)}))
+    .reduce((result, item) => ({...result, ...item}), {});
+
+  const firstFromCurrencies = tempStructure[InitialCurrency.FROM];
+  const firstToIndex = firstFromCurrencies.findIndex((to) => to === InitialCurrency.TO);
+
+  pairs.push(createCurrencyPair(InitialCurrency.FROM, firstFromCurrencies[firstToIndex]));
+
+  firstFromCurrencies.splice(firstToIndex, 1);
+
+  pairs.push(...firstFromCurrencies.map((to) => createCurrencyPair(InitialCurrency.FROM, to)));
+
+  delete tempStructure[InitialCurrency.FROM];
+
+  const usedCurrencies = [InitialCurrency.FROM];
+
+  Object.entries(tempStructure)
+    .forEach(([from, toValues]) => {
+      toValues.filter((to) => !usedCurrencies.includes(to))
+        .forEach((to) => pairs.push(createCurrencyPair(from, to)));
+      usedCurrencies.push(from);
+    });
+
+  return pairs;
 };
 
 const pullCurrencyRates = () => (dispatch, _getState) => {
@@ -66,34 +123,43 @@ const pullCurrencyRates = () => (dispatch, _getState) => {
 
     await dispatch(ActionCreator.setDateRange({minDate, maxDate}));
 
-    let currencyRates = {};
-
     if (!currencyStorage || currencyStorage.timeLabel !== timeLabel) {
-      const currencies = Object.values(Currency);
+      const dates = getDates(minDate, maxDate);
+      const fetchPairs = getCurrencyPairs();
+      const currencyRates = createCurrencyRatesStructure(dates);
 
-      const currenciesArgs = currencies
-        .map((currencyFrom, index) => {
-          return currencies.slice(index + 1).map((currencyTo) => `${currencyFrom}_${currencyTo}`);
-        })
-        .reduce((result, args) => result.concat(args), []);
+      dispatch(ActionCreator.loadCurrencyRate(currencyRates));
 
-      for (let i = 0, j = 2; i < currenciesArgs.length; i = i + 2, j = j + 2) {
-        const rates = await fetchCurrencyRates(currenciesArgs.slice(i, j).join(`,`), minDate, maxDate);
-        Object.assign(currencyRates, createCurrencyRateList(rates));
+      const requestCount = Math.ceil(fetchPairs.length / 2);
+      let responseCount = 0;
+      for (let i = 0, j = MAX_NUMBER_PAIRS; i < fetchPairs.length; i += MAX_NUMBER_PAIRS, j += MAX_NUMBER_PAIRS) {
+        fetchCurrencyRates(fetchPairs.slice(i, j).join(`,`), minDate, maxDate)
+          // eslint-disable-next-line no-loop-func
+          .then((response) => {
+            adaptServerRatesForClient(response, currencyRates);
+
+            Promise.resolve(dispatch(ActionCreator.loadCurrencyRate(currencyRates)))
+              .then(() => {
+                responseCount++;
+
+                if (requestCount === responseCount) {
+                  localStorage.setItem(
+                      CONVERTER_CURRENCY_KEY,
+                      JSON.stringify({
+                        timeLabel,
+                        currencyRates,
+                      })
+                  );
+
+                  dispatch(ActionCreator.completeLoading());
+                }
+              });
+          });
       }
-
-      localStorage.setItem(
-          CONVERTER_CURRENCY_KEY,
-          JSON.stringify({
-            timeLabel,
-            currencyRates,
-          })
-      );
     } else {
-      currencyRates = currencyStorage.currencyRates;
+      dispatch(ActionCreator.loadCurrencyRate(currencyStorage.currencyRates));
+      dispatch(ActionCreator.completeLoading());
     }
-
-    await dispatch(ActionCreator.loadCurrencyRate(currencyRates));
   })();
 };
 

@@ -2,9 +2,16 @@
   border: 1px solid var(--color-black-1, black);
   border-radius: 4px;
 
-  &:hover,
-  &:focus {
-    box-shadow: 0 0 0 2px var(--color-black-1, black);
+  &:not(:disabled) {
+    &:hover,
+    &:focus {
+      box-shadow: 0 0 0 2px var(--color-black-1, black);
+    }
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.1;
   }
 }
 

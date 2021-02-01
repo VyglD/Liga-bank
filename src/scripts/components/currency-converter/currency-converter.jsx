@@ -3,67 +3,35 @@ import {connect} from "react-redux";
 import ConverterField from "../converter-field/converter-field";
 import ConverterDatepicker from "../converter-datepicker/converter-datepicker";
 import ConverterHistory from "../converter-history/converter-history";
-import {
-  getDateStringWithDashes,
-  getDateStringWithDots,
-  createCurrencyRateKey
-} from "../../utils";
-import {Currency, MAX_HISTORY_NUMBER} from "../../constants";
-import {currencyRatesType, dateType} from "../../types/types";
+import {getDateStringWithDots} from "../../utils";
+import {InitialCurrency, MAX_HISTORY_NUMBER} from "../../constants";
+import {booleanType, currencyRatesType, dateType} from "../../types/types";
 
 const DIVIDER = 10000;
 const CONVERTER_HISTORY_KEY = `converter-history`;
 
+const INITIAL_CONVERT_VALUE = 1000;
+
 const CurrencyConverter = (props) => {
-  const {currencyRates, minDate, maxDate} = props;
+  const {currencyRates, minDate, maxDate, isLoading} = props;
 
   const getCurrencyRate = React.useCallback(
       (currencyIn, currencyOut, date) => {
-        if (currencyIn === currencyOut) {
-          return 1;
-        }
-
-        const key = createCurrencyRateKey(
-            currencyIn,
-            currencyOut,
-            getDateStringWithDashes(date)
-        );
-
-        return currencyRates[key];
+        return currencyRates[currencyIn][currencyOut][getDateStringWithDots(date)];
       },
       [currencyRates]
   );
 
-  const initialState = React.useMemo(
-      () => {
-        let initialСurrencyIn = Currency.RUB;
-        let initialСurrencyOut = Currency.USD;
-        let initialDate = maxDate;
-        let initialRate = getCurrencyRate(initialСurrencyIn, initialСurrencyOut, initialDate);
+  const [currencyIn, setCurrencyIn] = React.useState(InitialCurrency.FROM);
+  const [currencyOut, setCurrencyOut] = React.useState(() => {
+    return currencyRates[InitialCurrency.FROM][InitialCurrency.TO]
+      ? InitialCurrency.TO
+      : InitialCurrency.FROM;
+  });
+  const [selectedDate, setActiveDate] = React.useState(maxDate);
+  const [currencyRate, setCurrencyRate] = React.useState(1);
 
-        if (!initialRate) {
-          const firstKey = Object.keys(currencyRates)[0];
-          [initialСurrencyIn, initialСurrencyOut] = firstKey.split(`_`);
-          initialRate = currencyRates[firstKey];
-        }
-
-        return {
-          initialСurrencyIn,
-          initialСurrencyOut,
-          initialDate,
-          initialRate,
-        };
-      },
-      /* eslint-disable-next-line react-hooks/exhaustive-deps */
-      []
-  );
-
-  const [currencyIn, setCurrencyIn] = React.useState(initialState.initialСurrencyIn);
-  const [currencyOut, setCurrencyOut] = React.useState(initialState.initialСurrencyOut);
-  const [selectedDate, setActiveDate] = React.useState(initialState.initialDate);
-  const [currencyRate, setCurrencyRate] = React.useState(initialState.initialRate);
-
-  const [currencyInValue, setCurrencyInValue] = React.useState(1000);
+  const [currencyInValue, setCurrencyInValue] = React.useState(INITIAL_CONVERT_VALUE);
   const [currencyOutValue, setCurrencyOutValue] = React.useState(() => currencyInValue * currencyRate);
 
   const [exchanges, setExchanges] = React.useState(
@@ -76,6 +44,16 @@ const CurrencyConverter = (props) => {
 
         return historyStorage;
       }
+  );
+
+  React.useEffect(
+      () => {
+        if (!isLoading && currencyRates[InitialCurrency.FROM][InitialCurrency.TO]) {
+          setCurrencyOut(InitialCurrency.TO);
+        }
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [isLoading]
   );
 
   React.useEffect(
@@ -175,6 +153,8 @@ const CurrencyConverter = (props) => {
         onInput={handleCurrencyInInput}
         selectedCurrency={currencyIn}
         onChange={handleCurrencyInChange}
+        disabled={isLoading}
+        options={Object.keys(currencyRates)}
       />
       <ConverterField
         customClass="currency-converter__field-out"
@@ -184,6 +164,8 @@ const CurrencyConverter = (props) => {
         onInput={handleCurrencyOutInput}
         selectedCurrency={currencyOut}
         onChange={handleCurrencyOutChange}
+        disabled={isLoading}
+        options={Object.keys(currencyRates[currencyIn])}
       />
       <ConverterDatepicker
         customClass="currency-converter__datepicker"
@@ -211,12 +193,14 @@ CurrencyConverter.propTypes = {
   minDate: dateType,
   maxDate: dateType,
   currencyRates: currencyRatesType,
+  isLoading: booleanType,
 };
 
 const mapStateToProps = (state) => ({
   currencyRates: state.currencyRates,
   minDate: state.dateRange.minDate,
   maxDate: state.dateRange.maxDate,
+  isLoading: state.isLoading,
 });
 
 export {CurrencyConverter};

@@ -46,21 +46,18 @@
   }
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.prime-header__link {
-  &[href]:not(#{&}--active) {
-    &:hover,
-    &:focus {
-      transform: scale(1.1);
-    }
+.prime-header__link[href]:not(#{&}--active):not(:disabled) {
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
 
-    &:hover {
-      color: var(--color-orange-0, orange);
-    }
+  &:hover {
+    color: var(--color-orange-0, orange);
+  }
 
-    &:active {
-      opacity: 0.2;
-    }
+  &:active {
+    opacity: 0.2;
   }
 }
 
@@ -89,8 +86,7 @@
   transition: margin 0.3s;
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.prime-header__login {
+.prime-header__login:not(:disabled) {
   &:hover,
   &:focus {
     color: var(--color-orange-0, orange);

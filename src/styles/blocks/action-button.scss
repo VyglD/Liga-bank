@@ -28,8 +28,7 @@
   transition: box-shadow 0.2s;
 }
 
-/* stylelint-disable-next-line no-duplicate-selectors */
-.action-button {
+.action-button:not(:disabled) {
   &:hover,
   &:focus {
     color: var(--color-white-0, white);

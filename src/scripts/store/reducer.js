@@ -5,7 +5,8 @@ const initialState = {
   dateRange: {
     minDate: new Date(),
     maxDate: new Date(),
-  }
+  },
+  isLoading: true,
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,6 +20,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         ...{dateRange: action.payload}
+      };
+    case ActionType.COMPLETE_LOADING:
+      return {
+        ...state,
+        ...{isLoading: false}
       };
     default:
       return state;
