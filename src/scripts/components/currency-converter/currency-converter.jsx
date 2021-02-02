@@ -246,6 +246,7 @@ const CurrencyConverter = (props) => {
         onChange={handleCurrencyFromChange}
         disabled={isLoading}
         options={Object.keys(rateStructure)}
+        ariaLabel="Выбрать имеющуюся валюту"
       />
       <ConverterField
         customClass="currency-converter__field-out"
@@ -257,6 +258,7 @@ const CurrencyConverter = (props) => {
         onChange={handleCurrencyToChange}
         disabled={isLoading}
         options={Object.keys(rateStructure[state.currencyFrom])}
+        ariaLabel="Выбрать приобритаемую валюту"
       />
       <ConverterDatepicker
         customClass="currency-converter__datepicker"

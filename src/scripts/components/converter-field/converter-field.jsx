@@ -19,6 +19,7 @@ const ConverterField = (props) => {
     onChange,
     disabled,
     options,
+    ariaLabel,
   } = props;
 
   return (
@@ -42,6 +43,7 @@ const ConverterField = (props) => {
         value={selectedCurrency}
         onChange={onChange}
         disabled={disabled}
+        aria-label={ariaLabel}
       >
         {
           options.map((currencyValue) => (
@@ -68,6 +70,7 @@ ConverterField.propTypes = {
   onChange: functionType,
   disabled: booleanType,
   options: currenciesType,
+  ariaLabel: stringType,
 };
 
 export default ConverterField;
