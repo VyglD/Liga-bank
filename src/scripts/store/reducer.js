@@ -1,7 +1,7 @@
 import {ActionType} from "./actions";
 
 const initialState = {
-  currencyRates: {},
+  rateStructure: {},
   dateRange: {
     minDate: new Date(),
     maxDate: new Date(),
@@ -14,7 +14,7 @@ const reducer = (state = initialState, action) => {
     case ActionType.LOAD_CURRENCY_RATE:
       return {
         ...state,
-        ...{currencyRates: action.payload}
+        ...{rateStructure: action.payload}
       };
     case ActionType.SET_DATE_RANGE:
       return {

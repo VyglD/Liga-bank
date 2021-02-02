@@ -5,34 +5,150 @@ import ConverterDatepicker from "../converter-datepicker/converter-datepicker";
 import ConverterHistory from "../converter-history/converter-history";
 import {getDateStringWithDots} from "../../utils";
 import {InitialCurrency, MAX_HISTORY_NUMBER} from "../../constants";
-import {booleanType, currencyRatesType, dateType} from "../../types/types";
+import {booleanType, rateStructureType, dateType} from "../../types/types";
 
 const DIVIDER = 10000;
 const CONVERTER_HISTORY_KEY = `converter-history`;
 
 const INITIAL_CONVERT_VALUE = 1000;
 
-const CurrencyConverter = (props) => {
-  const {currencyRates, minDate, maxDate, isLoading} = props;
+const ActionType = {
+  SET_CURRENCY_FROM: `SET_CURRENCY_FROM`,
+  SET_CURRENCY_TO: `SET_CURRENCY_TO`,
+  SET_DATE: `SET_DATE`,
+  INPUT_VALUE_CURRENCY_FROM: `INPUT_VALUE_CURRENCY_FROM`,
+  INPUT_VALUE_CURRENCY_TO: `INPUT_VALUE_CURRENCY_TO`,
+  CHANGE_RATE_STRUCTURE: `CHANGE_RATE_STRUCTURE`,
+};
 
-  const getCurrencyRate = React.useCallback(
-      (currencyIn, currencyOut, date) => {
-        return currencyRates[currencyIn][currencyOut][getDateStringWithDots(date)];
-      },
-      [currencyRates]
+const getCurrencyRate = (rateStructure, currencyFrom, currencyTo, date) => {
+  return rateStructure[currencyFrom][currencyTo][getDateStringWithDots(date)];
+};
+
+const calculateValueCurrencyTo = (valueCurrencyFrom, currencyRate) => {
+  return Math.round(valueCurrencyFrom * currencyRate * DIVIDER) / DIVIDER;
+};
+const calculateValueCurrencyFrom = (valueCurrencyFrom, currencyRate) => {
+  return Math.round(valueCurrencyFrom / currencyRate * DIVIDER) / DIVIDER;
+};
+
+const init = (props) => {
+  const {rateStructure, maxDate} = props;
+
+  const currencyTo = rateStructure[InitialCurrency.FROM][InitialCurrency.TO]
+    ? InitialCurrency.TO
+    : InitialCurrency.FROM;
+
+  const initialState = {
+    currencyFrom: InitialCurrency.FROM,
+    currencyTo,
+    selectedDate: maxDate,
+    valueCurrencyFrom: INITIAL_CONVERT_VALUE,
+    rateStructure,
+  };
+
+  initialState[`currencyRate`] = getCurrencyRate(
+      initialState.rateStructure,
+      initialState.currencyFrom,
+      initialState.currencyTo,
+      initialState.selectedDate
   );
 
-  const [currencyIn, setCurrencyIn] = React.useState(InitialCurrency.FROM);
-  const [currencyOut, setCurrencyOut] = React.useState(() => {
-    return currencyRates[InitialCurrency.FROM][InitialCurrency.TO]
-      ? InitialCurrency.TO
-      : InitialCurrency.FROM;
-  });
-  const [selectedDate, setActiveDate] = React.useState(maxDate);
-  const [currencyRate, setCurrencyRate] = React.useState(1);
+  initialState[`valueCurrencyTo`] = calculateValueCurrencyTo(
+      initialState.valueCurrencyFrom,
+      initialState.currencyRate
+  );
 
-  const [currencyInValue, setCurrencyInValue] = React.useState(INITIAL_CONVERT_VALUE);
-  const [currencyOutValue, setCurrencyOutValue] = React.useState(() => currencyInValue * currencyRate);
+  return initialState;
+};
+
+const reducer = (state, action) => {
+  let currencyRate = state.currencyRate;
+  let valueCurrencyTo = state.valueCurrencyTo;
+
+  switch (action.type) {
+    case ActionType.SET_CURRENCY_FROM:
+      currencyRate = getCurrencyRate(
+          state.rateStructure,
+          action.payload,
+          state.currencyTo,
+          state.selectedDate
+      );
+
+      valueCurrencyTo = calculateValueCurrencyTo(
+          state.valueCurrencyFrom,
+          currencyRate
+      );
+
+      return {
+        ...state,
+        ...{currencyFrom: action.payload, currencyRate, valueCurrencyTo}
+      };
+    case ActionType.SET_CURRENCY_TO:
+      currencyRate = getCurrencyRate(
+          state.rateStructure,
+          state.currencyFrom,
+          action.payload,
+          state.selectedDate
+      );
+
+      valueCurrencyTo = calculateValueCurrencyTo(
+          state.valueCurrencyFrom,
+          currencyRate
+      );
+
+      return {
+        ...state,
+        ...{currencyTo: action.payload, currencyRate, valueCurrencyTo}
+      };
+    case ActionType.SET_DATE:
+      currencyRate = getCurrencyRate(
+          state.rateStructure,
+          state.currencyFrom,
+          state.currencyTo,
+          action.payload
+      );
+
+      valueCurrencyTo = calculateValueCurrencyTo(
+          state.valueCurrencyFrom,
+          currencyRate
+      );
+
+      return {
+        ...state,
+        ...{selectedDate: action.payload, currencyRate, valueCurrencyTo}
+      };
+    case ActionType.INPUT_VALUE_CURRENCY_FROM:
+      return {
+        ...state,
+        ...{
+          valueCurrencyFrom: action.payload,
+          valueCurrencyTo: calculateValueCurrencyTo(
+              action.payload,
+              state.currencyRate
+          )
+        }
+      };
+    case ActionType.INPUT_VALUE_CURRENCY_TO:
+      return {
+        ...state,
+        ...{
+          valueCurrencyTo: action.payload,
+          valueCurrencyFrom: calculateValueCurrencyFrom(
+              action.payload,
+              state.currencyRate
+          )
+        }
+      };
+    default:
+      return state;
+  }
+};
+
+const CurrencyConverter = (props) => {
+  const {rateStructure, minDate, maxDate, isLoading} = props;
+
+  const [state, dispatch] = React.useReducer(reducer, props, init);
 
   const [exchanges, setExchanges] = React.useState(
       () => {
@@ -48,8 +164,11 @@ const CurrencyConverter = (props) => {
 
   React.useEffect(
       () => {
-        if (!isLoading && currencyRates[InitialCurrency.FROM][InitialCurrency.TO]) {
-          setCurrencyOut(InitialCurrency.TO);
+        if (
+          rateStructure[InitialCurrency.FROM][InitialCurrency.TO]
+          && InitialCurrency.TO !== state.currencyTo
+        ) {
+          dispatch({type: ActionType.SET_CURRENCY_TO, payload: InitialCurrency.TO});
         }
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,58 +177,30 @@ const CurrencyConverter = (props) => {
 
   React.useEffect(
       () => {
-        setCurrencyRate(getCurrencyRate(currencyIn, currencyOut, selectedDate));
+        dispatch({type: ActionType.CHANGE_RATE_STRUCTURE, payload: rateStructure});
       },
-      [setCurrencyRate, getCurrencyRate, currencyIn, currencyOut, selectedDate]
+      [rateStructure]
   );
 
-  React.useEffect(
-      () => {
-        setCurrencyOutValue(Math.round(currencyInValue * currencyRate * DIVIDER) / DIVIDER);
-      },
-      [setCurrencyOutValue, currencyInValue, currencyRate]
-  );
+  const handleCurrencyFromChange = React.useCallback((evt) => {
+    dispatch({type: ActionType.SET_CURRENCY_FROM, payload: evt.target.value});
+  }, []);
 
-  const handleCurrencyInChange = React.useCallback(
-      (evt) => {
-        setCurrencyIn(evt.target.value);
-      },
-      [setCurrencyIn]
-  );
+  const handleCurrencyToChange = React.useCallback((evt) => {
+    dispatch({type: ActionType.SET_CURRENCY_TO, payload: evt.target.value});
+  }, []);
 
-  const handleCurrencyOutChange = React.useCallback(
-      (evt) => {
-        setCurrencyOut(evt.target.value);
-      },
-      [setCurrencyOut]
-  );
+  const handleDateChange = React.useCallback((date) => {
+    dispatch({type: ActionType.SET_DATE, payload: date});
+  }, []);
 
-  const handleDateChange = React.useCallback(
-      (date) => {
-        setActiveDate(date);
-      },
-      [setActiveDate]
-  );
+  const handleValueCurrencyToInput = React.useCallback((evt) => {
+    dispatch({type: ActionType.INPUT_VALUE_CURRENCY_TO, payload: evt.target.value});
+  }, []);
 
-  const handleCurrencyInInput = React.useCallback(
-      (evt) => {
-        const newValue = evt.target.value;
-
-        setCurrencyInValue(newValue);
-        setCurrencyOutValue(Math.round(newValue * currencyRate * DIVIDER) / DIVIDER);
-      },
-      [setCurrencyInValue, setCurrencyOutValue, currencyRate]
-  );
-
-  const handleCurrencyOutInput = React.useCallback(
-      (evt) => {
-        const newValue = evt.target.value;
-
-        setCurrencyOutValue(newValue);
-        setCurrencyInValue(Math.round(newValue / currencyRate * DIVIDER) / DIVIDER);
-      },
-      [setCurrencyInValue, setCurrencyOutValue, currencyRate]
-  );
+  const handleValueCurrencyFromInput = React.useCallback((evt) => {
+    dispatch({type: ActionType.INPUT_VALUE_CURRENCY_FROM, payload: evt.target.value});
+  }, []);
 
   const handleSaveButtonClick = React.useCallback(
       () => {
@@ -120,9 +211,9 @@ const CurrencyConverter = (props) => {
         }
 
         tempExchanges.unshift({
-          date: getDateStringWithDots(selectedDate),
-          amount: `${currencyInValue} ${currencyIn}`,
-          result: `${currencyOutValue} ${currencyOut}`,
+          date: getDateStringWithDots(state.selectedDate),
+          amount: `${state.valueCurrencyFrom} ${state.currencyFrom}`,
+          result: `${state.valueCurrencyTo} ${state.currencyTo}`,
         });
 
         localStorage.setItem(
@@ -131,7 +222,7 @@ const CurrencyConverter = (props) => {
         );
         setExchanges(tempExchanges);
       },
-      [exchanges, setExchanges, selectedDate, currencyInValue, currencyIn, currencyOutValue, currencyOut]
+      [exchanges, setExchanges, state]
   );
 
   const handleClearButtonClick = () => {
@@ -149,29 +240,29 @@ const CurrencyConverter = (props) => {
         customClass="currency-converter__field-in"
         label="У меня есть"
         name="input"
-        value={String(currencyInValue)}
-        onInput={handleCurrencyInInput}
-        selectedCurrency={currencyIn}
-        onChange={handleCurrencyInChange}
+        value={String(state.valueCurrencyFrom)}
+        onInput={handleValueCurrencyFromInput}
+        selectedCurrency={state.currencyFrom}
+        onChange={handleCurrencyFromChange}
         disabled={isLoading}
-        options={Object.keys(currencyRates)}
+        options={Object.keys(rateStructure)}
       />
       <ConverterField
         customClass="currency-converter__field-out"
         label="Хочу приобрести"
         name="output"
-        value={String(currencyOutValue)}
-        onInput={handleCurrencyOutInput}
-        selectedCurrency={currencyOut}
-        onChange={handleCurrencyOutChange}
+        value={String(state.valueCurrencyTo)}
+        onInput={handleValueCurrencyToInput}
+        selectedCurrency={state.currencyTo}
+        onChange={handleCurrencyToChange}
         disabled={isLoading}
-        options={Object.keys(currencyRates[currencyIn])}
+        options={Object.keys(rateStructure[state.currencyFrom])}
       />
       <ConverterDatepicker
         customClass="currency-converter__datepicker"
         minDate={minDate}
         maxDate={maxDate}
-        selectedDate={selectedDate}
+        selectedDate={state.selectedDate}
         onChange={handleDateChange}
       />
       <button
@@ -192,12 +283,12 @@ const CurrencyConverter = (props) => {
 CurrencyConverter.propTypes = {
   minDate: dateType,
   maxDate: dateType,
-  currencyRates: currencyRatesType,
+  rateStructure: rateStructureType,
   isLoading: booleanType,
 };
 
 const mapStateToProps = (state) => ({
-  currencyRates: state.currencyRates,
+  rateStructure: state.rateStructure,
   minDate: state.dateRange.minDate,
   maxDate: state.dateRange.maxDate,
   isLoading: state.isLoading,
