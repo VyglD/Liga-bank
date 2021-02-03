@@ -1,3 +1,5 @@
+$max-history-number: 10;
+
 .converter-history {
   position: relative;
 
@@ -55,8 +57,9 @@
   flex-wrap: wrap;
   align-items: center;
   width: 260px;
-  margin-left: 131px;
-  padding: 15px 0 8px;
+  padding: 15px 0 8px 131px;
+
+  overflow: hidden;
 
   &::after {
     content: "";
@@ -72,6 +75,16 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
+  }
+
+  &--full {
+    padding-right: 50%;
+  }
+
+  @for $i from 1 through $max-history-number {
+    &--order-#{$i} {
+      order: $i;
+    }
   }
 }
 
@@ -116,4 +129,64 @@
 
   font-size: 16px;
   line-height: 19px;
+}
+
+@media (max-width: $desktop) {
+  .converter-history {
+    &::before {
+      content: none;
+    }
+  }
+
+  .converter-history__exchange-wrapper {
+    width: 100%;
+
+    &--full {
+      padding-right: 0;
+    }
+
+    @for $i from 1 through $max-history-number {
+      &--order-#{$i} {
+        order: 0;
+      }
+    }
+  }
+}
+
+@media (max-width: $tablet) {
+  .converter-history {
+    padding: 20px;
+  }
+
+  .converter-history__title {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  .converter-history__exchange-wrapper {
+    flex-direction: column;
+    margin-bottom: 30px;
+    padding: 0;
+  }
+
+  .converter-history__exchange-date,
+  .converter-history__exchange-amount,
+  .converter-history__exchange-result {
+    width: 100%;
+    margin: 5px 0;
+
+    text-align: center;
+  }
+
+  .converter-history__exchange-date {
+    margin-left: 0;
+
+    color: var(--color-blue-0, blue);
+    font-size: 20px;
+  }
+
+  .converter-history__clear-button {
+    width: 100%;
+    margin: auto auto 0;
+  }
 }

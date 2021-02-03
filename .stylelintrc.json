@@ -20,7 +20,8 @@
           "else",
           "return",
           "function",
-          "use"
+          "use",
+          "for"
         ]
       }],
     "at-rule-empty-line-before": ["always", {

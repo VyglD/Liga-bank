@@ -2,29 +2,28 @@ import React from "react";
 import {exchangesType, functionType} from "../../types/types";
 import {MAX_HISTORY_NUMBER} from "../../constants";
 
-const getStyle = (length, index) => {
+const getClass = (length, index) => {
   const rowsInColumn = MAX_HISTORY_NUMBER / 2;
-  const padding = {paddingRight: `50%`};
+  const defaultClass = `converter-history__exchange-wrapper`;
 
   if (length <= rowsInColumn) {
-    return padding;
+    return `${defaultClass} ${defaultClass}--full`;
   }
 
   if (index < rowsInColumn) {
-    const style = {
-      order: (index + 1) * 2 - 1,
-    };
+    const order = (index + 1) * 2 - 1;
+    const orderClass = `${defaultClass}--order-${order}`;
 
     if ((index + 1) > length - rowsInColumn) {
-      Object.assign(style, padding);
+      return `${defaultClass} ${orderClass} ${defaultClass}--full`;
     }
 
-    return style;
+    return `${defaultClass} ${orderClass}`;
   }
 
-  return {
-    order: MAX_HISTORY_NUMBER - ((MAX_HISTORY_NUMBER - (index + 1)) * 2),
-  };
+  const order = MAX_HISTORY_NUMBER - ((MAX_HISTORY_NUMBER - (index + 1)) * 2);
+
+  return `${defaultClass} ${defaultClass}--order-${order}`;
 };
 
 const ConverterHistory = (props) => {
@@ -40,8 +39,7 @@ const ConverterHistory = (props) => {
           exchanges.map((exchange, index) => (
             <li
               key={index}
-              className="converter-history__exchange-wrapper"
-              style={getStyle(exchanges.length, index)}
+              className={getClass(exchanges.length, index)}
             >
               <span className="converter-history__exchange-date">
                 {exchange.date}
