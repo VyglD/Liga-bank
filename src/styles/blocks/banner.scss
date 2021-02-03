@@ -10,7 +10,8 @@
 
   box-sizing: border-box;
   display: block;
-  width: $desktop;
+  width: 100%;
+  max-width: $desktop;
   min-height: 400px;
   margin: 0 auto;
   padding: 20px var(--prime-offset) 20px 268px;
@@ -31,19 +32,19 @@
     150px 269px,
     270px 269px,
     298px 100%;
+  overflow: hidden;
 
   &::before {
     content: "";
 
     position: absolute;
-    left: 50%;
+    left: 697px;
     bottom: 53px;
     z-index: 0;
 
     display: block;
     width: 446px;
     height: 286px;
-    margin-left: 14px;
 
     background-image: url("../../img/cards.webp");
     background-position: center;
@@ -87,4 +88,32 @@
   z-index: 1;
 
   margin-top: 33px;
+}
+
+@media (max-width: $tablet) {
+  .banner__content {
+    padding: var(--prime-offset);
+
+    background: transparent;
+
+    &::before {
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+
+      opacity: 0.2;
+    }
+  }
+
+  .banner__title,
+  .banner__subtitle {
+    text-align: center;
+    text-shadow: 0 0 7px var(--color-black-1, black);
+  }
+
+  .banner__button {
+    width: 100%;
+
+    text-align: center;
+  }
 }
