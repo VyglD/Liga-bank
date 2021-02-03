@@ -1,4 +1,6 @@
 .converter-field {
+  --cf-select-width: 120px;
+
   display: flex;
   flex-wrap: wrap;
   width: 525px;
@@ -59,4 +61,27 @@
 
   -webkit-appearance: none; // stylelint-disable-line property-no-vendor-prefix
   -moz-appearance: none; // stylelint-disable-line property-no-vendor-prefix
+}
+
+@media (max-width: $tablet) {
+  .converter-field {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .converter-field__label {
+    margin-bottom: 8px;
+
+    font-size: 20px;
+  }
+
+  .converter-field__input {
+    flex-shrink: 1;
+    width: calc(100% - 130px);
+    font-size: 20px;
+  }
+
+  .converter-field__select {
+    font-size: 20px;
+  }
 }
