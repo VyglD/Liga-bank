@@ -27,8 +27,13 @@ const getDates = (dateStart, dateFinish) => {
   return dates;
 };
 
+const getNumberWithComma = (number) => {
+  return String(number).replace(`.`, `,`);
+};
+
 export {
   getDateStringWithDashes,
   getDateStringWithDots,
   getDates,
+  getNumberWithComma,
 };

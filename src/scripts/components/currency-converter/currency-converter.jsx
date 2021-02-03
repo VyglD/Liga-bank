@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import ConverterField from "../converter-field/converter-field";
 import ConverterDatepicker from "../converter-datepicker/converter-datepicker";
 import ConverterHistory from "../converter-history/converter-history";
-import {getDateStringWithDots} from "../../utils";
+import {getDateStringWithDots, getNumberWithComma} from "../../utils";
 import {InitialCurrency, MAX_HISTORY_NUMBER} from "../../constants";
 import {booleanType, rateStructureType, dateType} from "../../types/types";
 
@@ -212,8 +212,8 @@ const CurrencyConverter = (props) => {
 
         tempExchanges.unshift({
           date: getDateStringWithDots(state.selectedDate),
-          amount: `${state.valueCurrencyFrom} ${state.currencyFrom}`,
-          result: `${state.valueCurrencyTo} ${state.currencyTo}`,
+          amount: `${getNumberWithComma(state.valueCurrencyFrom)} ${state.currencyFrom}`,
+          result: `${getNumberWithComma(state.valueCurrencyTo)} ${state.currencyTo}`,
         });
 
         localStorage.setItem(
