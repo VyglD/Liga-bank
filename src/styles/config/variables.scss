@@ -2,9 +2,14 @@ $bald-desktop: 1170px;
 $prime-offset: 98px;
 $desktop: #{$bald-desktop + $prime-offset * 2};
 
+$tablet: 760px;
+$mobile: 320px;
+
 $color-black-0: #000000;
 
 :root {
+  --prime-offset: #{$prime-offset};
+
   --color-white-0: #FFFFFF;
   --color-white-1: #F6F7FF;
   --color-white-2: #E0E1EA;
@@ -16,4 +21,16 @@ $color-black-0: #000000;
   --color-blue-0: #2C36F2;
   --color-blue-1: #2027B3;
   --color-orange-0: #F25B24;
+}
+
+@media (max-width: $desktop) {
+  :root {
+    --prime-offset: 50px;
+  }
+}
+
+@media (max-width: $tablet) {
+  :root {
+    --prime-offset: 20px;
+  }
 }

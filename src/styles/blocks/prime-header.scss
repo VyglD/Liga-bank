@@ -10,15 +10,18 @@
 .prime-header__content {
   box-sizing: border-box;
   display: flex;
-  width: $desktop;
+  align-items: center;
+  width: 100%;
+  max-width: $desktop;
   margin: 0 auto;
-  padding: 27px $prime-offset 25px;
+  padding: 13px var(--prime-offset);
 }
 
 .prime-header__logo {
   display: block;
   width: 149px;
   height: 25px;
+  margin-top: -12px;
 }
 
 .prime-header__nav {
@@ -28,11 +31,16 @@
 .prime-header__nav-links-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+}
+
+.prime-header__link-wrapper {
+  flex-shrink: 0;
 }
 
 .prime-header__link {
   display: block;
-  padding: 10px 13px;
+  padding: 9px 13px 10px;
 
   font-size: 16px;
   line-height: 19px;
@@ -67,7 +75,7 @@
   align-items: center;
   margin: 0;
   margin-left: auto;
-  padding: 0;
+  padding: 23px 0;
 
   color: var(--color-black-1, black);
   font-size: 16px;
@@ -112,5 +120,33 @@
 
   &:active {
     opacity: 0.2;
+  }
+}
+
+@media (max-width: $tablet) {
+  .prime-header__content {
+    flex-direction: column;
+  }
+
+  .prime-header__logo {
+    margin-top: 0;
+  }
+
+  .prime-header__nav {
+    width: 100%;
+    margin: 20px auto 0;
+  }
+
+  .prime-header__nav-links-list {
+    flex-direction: column;
+  }
+
+  .prime-header__link {
+    text-align: center;
+  }
+
+  .prime-header__login {
+    justify-content: center;
+    width: 100%;
   }
 }

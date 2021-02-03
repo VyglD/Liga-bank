@@ -4,7 +4,8 @@ html {
 
 body {
   box-sizing: border-box;
-  min-width: $desktop;
+  width: 100%;
+  min-width: $mobile;
   margin: 0 auto;
   height: 100%;
   min-height: 100vh;

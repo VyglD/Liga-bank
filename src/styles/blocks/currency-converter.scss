@@ -8,7 +8,7 @@
   justify-content: space-between;
   width: $desktop;
   margin: 0 auto;
-  padding: 20px $prime-offset;
+  padding: 20px var(--prime-offset);
 
   &::after {
     content: "";
